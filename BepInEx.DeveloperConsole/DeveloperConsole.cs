@@ -21,13 +21,15 @@ namespace BepInEx
 
         public static ConfigFile BepinexConfig { get; } = new ConfigFile(Utility.CombinePaths(Paths.ConfigPath, "BepInEx.cfg"), false);
 
-        public static ConfigWrapper<int> LogDepth { get; private set; }
-        public static ConfigWrapper<bool> LogUnity { get; private set; }
+        public static ConfigEntry<int> LogDepth { get; private set; }
+        public static ConfigEntry<bool> LogUnity { get; private set; }
+        public static ConfigEntry<KeyboardShortcut> ToggleUIShortcut { get; private set; }
 
         public DeveloperConsole()
         {
-            LogDepth = Config.Wrap("Config", "Log buffer size", "Size of the log buffer in characters", 16300);
-            LogUnity = BepinexConfig.Wrap("Logging", "UnityLogListening", "Enables showing unity log messages in the BepInEx logging system.", true);
+            LogDepth = Config.Bind<int>("Config", "Log buffer size", 16300, "Size of the log buffer in characters");
+            LogUnity = Config.Bind<bool>("Logging", "UnityLogListening", true, "Enables showing unity log messages in the BepInEx logging system.");
+            ToggleUIShortcut = Config.Bind<KeyboardShortcut>("Config", "Toggle UI Shortcut", new KeyboardShortcut(KeyCode.Pause), "Toggles the visibility of the developer console.");
                        
             Logging.Logger.Listeners.Add(new LogListener());
             Logger = base.Logger;
@@ -59,7 +61,7 @@ namespace BepInEx
 
         protected void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Pause))
+            if (ToggleUIShortcut.Value.IsDown())
                 showingUI = !showingUI;
         }
 
