@@ -93,7 +93,16 @@ namespace BepInEx
             }
             GUILayout.EndVertical();
 
-            GUI.DragWindow();
+            switch(Event.current.button)
+            {
+                case 0://Left mouse button window drag - move
+                    GUI.DragWindow();
+                    break;
+                case 1://Right mouse button window drag - resize
+                    if(Event.current.type == EventType.MouseDrag)
+                        UI.size += Event.current.delta;
+                    break;
+            }
         }
     }
 }
