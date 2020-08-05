@@ -18,19 +18,24 @@ namespace BepInEx
         private static string TotalLog = "";
         private Rect UI = new Rect(20, 20, 400, 400);
         private static Vector2 scrollPosition = Vector2.zero;
+        private GUIStyle logTextStyle = new GUIStyle();
 
         public static ConfigFile BepinexConfig { get; } = new ConfigFile(Utility.CombinePaths(Paths.ConfigPath, "BepInEx.cfg"), false);
 
         public static ConfigEntry<int> LogDepth { get; private set; }
+        public static ConfigEntry<int> fontSize { get; private set; }
         public static ConfigEntry<bool> LogUnity { get; private set; }
         public static ConfigEntry<KeyboardShortcut> ToggleUIShortcut { get; private set; }
 
         public DeveloperConsole()
         {
-            LogDepth = Config.Bind<int>("Config", "Log buffer size", 16300, "Size of the log buffer in characters");
+            LogDepth = Config.Bind<int>("Config", "Log buffer size", 16300, "Size of the log buffer in characters.");
+            fontSize = Config.Bind<int>("Config", "Font Size", 16, new ConfigDescription("Adjusts the fontSize of the log text.", new AcceptableValueRange<int>(8, 80)));
             LogUnity = Config.Bind<bool>("Logging", "UnityLogListening", true, "Enables showing unity log messages in the BepInEx logging system.");
             ToggleUIShortcut = Config.Bind<KeyboardShortcut>("Config", "Toggle UI Shortcut", new KeyboardShortcut(KeyCode.Pause), "Toggles the visibility of the developer console.");
-                       
+            
+            logTextStyle.normal.textColor = Color.white;
+            
             Logging.Logger.Listeners.Add(new LogListener());
             Logger = base.Logger;
         }
@@ -85,7 +90,8 @@ namespace BepInEx
                     GUILayout.BeginVertical();
                     {
                         GUILayout.FlexibleSpace();
-                        GUILayout.TextArea(TotalLog, GUI.skin.label);
+                        logTextStyle.fontSize = fontSize.Value;
+                        GUILayout.TextArea(TotalLog, logTextStyle);
                     }
                     GUILayout.EndVertical();
                 }
