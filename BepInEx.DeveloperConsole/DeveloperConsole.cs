@@ -29,10 +29,10 @@ namespace BepInEx
 
         public DeveloperConsole()
         {
-            LogDepth = Config.Bind<int>("Config", "Log buffer size", 16300, "Size of the log buffer in characters.");
-            fontSize = Config.Bind<int>("Config", "Font Size", 16, new ConfigDescription("Adjusts the fontSize of the log text.", new AcceptableValueRange<int>(8, 80)));
-            LogUnity = Config.Bind<bool>("Logging", "UnityLogListening", true, "Enables showing unity log messages in the BepInEx logging system.");
-            ToggleUIShortcut = Config.Bind<KeyboardShortcut>("Config", "Toggle UI Shortcut", new KeyboardShortcut(KeyCode.Pause), "Toggles the visibility of the developer console.");
+            LogDepth = Config.Bind("Config", "Log buffer size", 16300, "Size of the log buffer in characters.");
+            fontSize = Config.Bind("Config", "Font Size", 14, new ConfigDescription("Adjusts the fontSize of the log text.", new AcceptableValueRange<int>(8, 80)));
+            LogUnity = Config.Bind("Logging", "UnityLogListening", true, "Enables showing unity log messages in the BepInEx logging system.");
+            ToggleUIShortcut = Config.Bind("Config", "Toggle UI Shortcut", new KeyboardShortcut(KeyCode.Pause), "Toggles the visibility of the developer console.");
             
             logTextStyle.normal.textColor = Color.white;
             
