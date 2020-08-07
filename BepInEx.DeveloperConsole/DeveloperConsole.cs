@@ -106,7 +106,8 @@ namespace BepInEx
                     break;
                 case 1://Right mouse button window drag - resize
                     if(Event.current.type == EventType.MouseDrag)
-                        UI.size += Event.current.delta;
+                        UI.width += Event.current.delta.x;
+                        UI.height += Event.current.delta.y;
                     break;
             }
         }
